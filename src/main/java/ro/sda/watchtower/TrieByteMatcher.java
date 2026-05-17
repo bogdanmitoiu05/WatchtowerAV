@@ -1,8 +1,8 @@
 package ro.sda.watchtower;
 
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import org.w3c.dom.Node;
+
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -66,5 +66,50 @@ public class TrieByteMatcher {
         configureFailNodes();
     }
 
+    public void deleteSequence(byte[] sequence) throws NoSuchElementException{
+        TrieNode node = root;
+        for(byte b: sequence){
+            if(!node.hasByte(b)){
+                throw new NoSuchElementException("Sequence not found");
+            }
+            node = node.advance(b);
+        }
+        node.unmarkFinal();
+        byte transitionByte = 0;
+
+        if(node.getChildren().isEmpty()) {
+            while (node.getChildren().size() < 2) {
+                transitionByte = node.getTransitionByte();
+                node = node.getParent();
+            }
+            node.remove(transitionByte);
+        }
+    }
+    public List<SequenceEntry> getRegisteredStrings(){
+        Stack<TrieNode> stack = new Stack<>();
+        Stack<TrieNode> sequenceBytes = new Stack<>();
+
+        stack.push(root);
+        List<SequenceEntry> sequences = new ArrayList<>();
+        while(!stack.isEmpty()){
+            TrieNode node = stack.pop();
+            if(node.isFinal()){
+                TrieNode seqNode = node;
+                while (!seqNode.isRoot()){
+                    sequenceBytes.push(seqNode);
+                    seqNode = seqNode.getParent();
+                }
+                List<Byte> cSeq = new ArrayList<>(sequenceBytes.size());
+                while(!sequenceBytes.isEmpty()){
+                    cSeq.add(sequenceBytes.pop().getTransitionByte());
+                }
+                sequences.add(new SequenceEntry(node.getMatchId(), cSeq.toArray(new Byte[0])));
+            }
+            for(TrieNode n: node.getChildren().values()){
+                stack.push(n);
+            }
+        }
+        return sequences;
+    }
 
 }
