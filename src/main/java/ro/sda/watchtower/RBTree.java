@@ -264,6 +264,7 @@ public class RBTree {
         if(node.getLeft() != nullNode)
             inOrderTraverse(node.getLeft(), sb);
         sb.append(node);
+        sb.append('\n');
         if(node.getRight() != nullNode)
             inOrderTraverse(node.getRight(), sb);
     }

@@ -39,7 +39,10 @@ public class TrieByteMatcher {
                 SequenceMatch match = new SequenceMatch(pointer.getMatchId(), readHead - size,getMatchLength(pointer));
                 matches.add(match);
             }
-            pointer = pointer.advance(b);
+            AdvanceResult result = pointer.advance(b);
+            if(result.hasFailedMatch())
+                result = result.node().advance(b);
+            pointer = result.node();
             ++readHead;
         }
         return matches;
@@ -72,7 +75,7 @@ public class TrieByteMatcher {
             TrieNode node = pair.node();
 
             for(Byte b: node.getChildren().keySet()){
-                nodes.add(new ByteAndNode(b, node.advance(b)));
+                nodes.add(new ByteAndNode(b, node.advance(b).node()));
             }
             configureFailNodesForNode(pair);
         }
@@ -84,7 +87,7 @@ public class TrieByteMatcher {
             if (!node.hasByte(b)){
                 node.registerNewByte(b);
             }
-            node = node.advance(b);
+            node = node.advance(b).node();
         }
         node.markAsFinal(count);
         ++count;
@@ -129,6 +132,7 @@ public class TrieByteMatcher {
             }
             node.remove(transitionByte);
         }
+        --count;
     }
     public List<SequenceEntry> getRegisteredStrings(){
         Stack<TrieNode> stack = new Stack<>();

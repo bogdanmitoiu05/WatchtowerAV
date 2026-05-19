@@ -56,7 +56,7 @@ public class Main {
         IO.println("WatchtowerAV - proiect SDA 2026 - Mitoiu Bogdan-Petru");
         WatchtowerAVEngine engine = new WatchtowerAVEngine();
         int decision = -1;
-        while(decision != 5){
+        while(decision != 7){
             decision = showMenu();
             switch (decision){
                 case 1:
@@ -85,8 +85,13 @@ public class Main {
                 case 4:
                     String toScan = IOInterfacer.requestString("Type the file name to scan",(s)-> Files.exists(Path.of(s)), "File does not exist");
                     var results = engine.scan(toScan);
-                    for(var result: results){
-                        IO.println(result);
+                    if(results.isEmpty()){
+                        IO.println("No threats found");
+                    }
+                    else {
+                        for (var result : results) {
+                            IO.println(result);
+                        }
                     }
                     break;
                 case 5:

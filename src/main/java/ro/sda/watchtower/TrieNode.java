@@ -62,10 +62,10 @@ public class TrieNode {
     public void setFailNode(TrieNode node){
         this.failNode = node;
     }
-    public TrieNode advance(byte readByte){
+    public AdvanceResult advance(byte readByte){
         if(hasByte(readByte))
-            return children.get(readByte);
-        return failNode;
+            return new AdvanceResult(false, children.get(readByte));
+        return new AdvanceResult(true, failNode);
     }
 
     public void remove(byte transitionByte) {

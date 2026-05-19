@@ -1,0 +1,214 @@
+WatchtowerAV - proiect SDA 2026 - Mitoiu Bogdan-Petru
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 2
+Type the file name of the virus
+> vir\abcd.txt
+
+Type the file name of the description
+> desc\abcde-desc.txt
+
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 2
+Type the file name of the virus
+> vir\vir2.txt
+
+Type the file name of the description
+> desc\vir2-desc.txt
+
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 1
+1. - [117, 115, 116, 117, 114, 111, 105]
+0. - [99, 101, 97, 112, 97]
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 5
+Traversare in-ordine:
+RBTreeNode{color=BLACK, value='desc\abcde-desc.txt', key=0}
+RBTreeNode{color=RED, value='desc\vir2-desc.txt', key=1}
+
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 4
+Type the file name to scan
+> file.txt
+
+Found threat 0 at index 0, size 5
+Found threat 0 at index 5, size 5
+Found threat 1 at index 10, size 7
+Found threat 0 at index 32, size 5
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 4
+Type the file name to scan
+> file-clean.txt
+
+No threats found
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 6
+Enter the id of the threat you want to inspect
+> 0
+
+Example 1 of virus
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 6
+Enter the id of the threat you want to inspect
+> 1
+
+Example description of virus 2
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 3
+Enter the id of the threat you want to delete
+> 1
+
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 5
+Traversare in-ordine:
+RBTreeNode{color=BLACK, value='desc\abcde-desc.txt', key=0}
+
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 1
+0. - [99, 101, 97, 112, 97]
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 6
+Enter the id of the threat you want to inspect
+> 1
+Index out of range
+
+> 0
+
+Example 1 of virus
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 4
+Type the file name to scan
+> file.txt
+
+Found threat 0 at index 0, size 5
+Found threat 0 at index 5, size 5
+Found threat 0 at index 32, size 5
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 4
+Type the file name to scan
+> file-clean.txt
+
+No threats found
+Current directory: D:\@home\thonkdifferent\UVT\SDA\WatchtowerAV
+Selectati o optiune:
+1. Vizualizati baza de definitii
+2. Adaugati in baza de definitii
+3. Stergeti din baza de definitii
+4. Scanati un fisier
+5. Afisati structura RBTree
+6. Afisati informatii despre o amenintare
+7. Inchideti
+> 7
+
+Process finished with exit code 0
