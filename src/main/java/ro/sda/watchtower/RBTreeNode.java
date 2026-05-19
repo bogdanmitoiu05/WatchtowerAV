@@ -7,11 +7,14 @@ public class RBTreeNode {
     private RBTreeNode parent;
     private RBTreeNode left;
     private RBTreeNode right;
-
+    public static final RBTreeNode nullNode = new RBTreeNode(-1,"");
     public RBTreeNode(int key, String value){
         this.key = key;
         this.value = value;
-        this.color = RBNodeColor.BLACK;
+        this.color = RBNodeColor.RED;
+        this.parent = nullNode;
+        this.left = nullNode;
+        this.right = nullNode;
     }
 
     public RBTreeNode getLeft() {
