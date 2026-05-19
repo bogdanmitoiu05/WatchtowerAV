@@ -12,14 +12,43 @@ public class TrieByteMatcher {
 
     private final TrieNode root;
     private int count;
+    private TrieNode pointer;
+    private long readHead;
     public TrieByteMatcher(){
         root = new TrieNode();
         root.setFailNode(root);
         count = 0;
+        pointer = root;
+        readHead = 0;
     }
 
     public int getCount(){
         return count;
+    }
+
+    private long getMatchLength(TrieNode start){
+        long size = 0;
+        while(!start.isRoot()){
+            ++size;
+            start = start.getParent();
+        }
+        return size;
+    }
+    public List<SequenceMatch> tryMatchBuffer(byte[] buffer){
+        List<SequenceMatch> matches = new ArrayList<>();
+        for(byte b: buffer){
+            if(pointer.isFinal()){
+                long size = getMatchLength(pointer);
+                SequenceMatch match = new SequenceMatch(pointer.getMatchId(), readHead - size,getMatchLength(pointer));
+                matches.add(match);
+            }
+            pointer.advance(b);
+        }
+        return matches;
+    }
+    public void reset(){
+        pointer = root;
+        readHead = 0;
     }
     private void configureFailNodesForNode(ByteAndNode pair){
         TrieNode orig = pair.node();
@@ -50,9 +79,9 @@ public class TrieByteMatcher {
             configureFailNodesForNode(pair);
         }
     }
-    public void addNewSequence(byte[] byteStream){
+    public int addNewSequence(byte[] byteStream){
         TrieNode node = root;
-        ++count;
+
         for (byte b: byteStream){
             if (!node.hasByte(b)){
                 node.registerNewByte(b);
@@ -60,20 +89,38 @@ public class TrieByteMatcher {
             node = node.advance(b);
         }
         node.markAsFinal(count);
+        ++count;
+        return count-1;
 
     }
     public void commit(){
         configureFailNodes();
     }
 
-    public void deleteSequence(byte[] sequence) throws NoSuchElementException{
+
+    public void deleteSequenceById(int id) throws NoSuchElementException{
+
+        Stack<TrieNode> stack = new Stack<>();
+        stack.push(root);
         TrieNode node = root;
-        for(byte b: sequence){
-            if(!node.hasByte(b)){
-                throw new NoSuchElementException("Sequence not found");
+        boolean found = false;
+        while (!stack.isEmpty()){
+            node = stack.pop();
+            if(node.isFinal() && node.getMatchId() == id)
+            {
+                found = true;
+                break;
             }
-            node = node.advance(b);
+            for(TrieNode child : node.getChildren().values()){
+                stack.push(child);
+            }
         }
+        stack.clear();
+
+        if(!found)
+            throw new NoSuchElementException(String.format("%d not found", id));
+
+
         node.unmarkFinal();
         byte transitionByte = 0;
 

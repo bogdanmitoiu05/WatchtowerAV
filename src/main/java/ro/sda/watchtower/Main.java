@@ -1,17 +1,98 @@
 package ro.sda.watchtower;
 
+import java.io.FileNotFoundException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Scanner;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+    private static void printHeader(){
+        IO.println(String.format("Current directory: %s", Paths.get("")
+                .toAbsolutePath()));
+        IO.println("Selectati o optiune:");
+        IO.println("1. Vizualizati baza de definitii");
+        IO.println("2. Adaugati in baza de definitii");
+        IO.println("3. Stergeti din baza de definitii");
+        IO.println("4. Scanati un fisier");
+        IO.println("5. Inchideti");
+    }
+    private static int showMenu(){
+        int decision = -1;
+        printHeader();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+        Scanner scanner = new Scanner(System.in);
+        while(decision == -1){
+            IO.print("> ");
+            String line = scanner.nextLine();
+            if(line.equals("menu") || line.equals("help")){
+                printHeader();
+                continue;
+            }
+            try {
+                decision = Integer.parseInt(line);
+            }
+            catch (NumberFormatException e){
+                IO.println("Not a number or command");
+                continue;
+            }
+            if(decision < 1 || decision > 5){
+                IO.println("Invalid option");
+                decision = -1;
+            }
+        }
+        return decision;
+    }
+
+
+
+    static void main() {
+        IO.println("WatchtowerAV - proiect SDA 2026 - Mitoiu Bogdan-Petru");
+        WatchtowerAVEngine engine = new WatchtowerAVEngine();
+        int decision = -1;
+        while(decision != 5){
+            decision = showMenu();
+            switch (decision){
+                case 1:
+                    var matches = engine.getDefinitions();
+                    for(var match: matches){
+                        IO.println(String.format("%d. - %s",match.id(), Arrays.toString(match.bytes())));
+                    }
+                    break;
+                case 2:
+
+                    String virFile = IOInterfacer.requestString("Type the file name of the virus",(s)-> Files.exists(Path.of(s)), "File does not exist");
+                    String descFile = IOInterfacer.requestString("Type the file name of the description",(s)-> Files.exists(Path.of(s)), "File does not exist");
+
+                    try{
+                        engine.add(virFile,descFile);
+                    } catch (FileAlreadyExistsException e) {
+                        IO.println("Error: file already exists");
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case 3:
+                    int virId = IOInterfacer.requestInt("Enter the id of the threat you want to delete", (i)-> 0<=i && i<engine.getDefCount(),"Index out of range");
+                    engine.remove(virId);
+                    break;
+                case 4:
+                    String toScan = IOInterfacer.requestString("Type the file name to scan",(s)-> Files.exists(Path.of(s)), "File does not exist");
+                    var results = engine.scan(toScan);
+                    for(var result: results){
+                        IO.println(result);
+                    }
+                    break;
+                case 5:
+                    break;
+                default:
+                    IO.println("Invalid option");
+                    break;
+            }
         }
     }
 }

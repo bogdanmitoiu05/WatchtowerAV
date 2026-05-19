@@ -17,6 +17,15 @@ public class RBTreeNode {
         this.right = nullNode;
     }
 
+    @Override
+    public String toString() {
+        return "RBTreeNode{" +
+                "color=" + color +
+                ", value='" + value + '\'' +
+                ", key=" + key +
+                '}';
+    }
+
     public RBTreeNode getLeft() {
         return left;
     }
@@ -37,16 +46,8 @@ public class RBTreeNode {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public int getKey() {
         return key;
-    }
-
-    public void setKey(int key) {
-        this.key = key;
     }
 
     public RBTreeNode getParent() {
