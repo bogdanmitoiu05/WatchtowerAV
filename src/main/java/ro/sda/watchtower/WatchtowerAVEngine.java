@@ -58,6 +58,7 @@ public class WatchtowerAVEngine {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        matcher.reset();
         return matches;
     }
     public void remove(int defId){
@@ -76,4 +77,7 @@ public class WatchtowerAVEngine {
         return matcher.getRegisteredStrings();
     }
 
+    public void printDescDb() {
+        IO.println(detailsTree);
+    }
 }

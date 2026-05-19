@@ -19,7 +19,9 @@ public class Main {
         IO.println("2. Adaugati in baza de definitii");
         IO.println("3. Stergeti din baza de definitii");
         IO.println("4. Scanati un fisier");
-        IO.println("5. Inchideti");
+        IO.println("5. Afisati structura RBTree");
+        IO.println("6. Afisati informatii despre o amenintare");
+        IO.println("7. Inchideti");
     }
     private static int showMenu(){
         int decision = -1;
@@ -40,7 +42,7 @@ public class Main {
                 IO.println("Not a number or command");
                 continue;
             }
-            if(decision < 1 || decision > 5){
+            if(decision < 1 || decision > 7){
                 IO.println("Invalid option");
                 decision = -1;
             }
@@ -88,6 +90,13 @@ public class Main {
                     }
                     break;
                 case 5:
+                    engine.printDescDb();
+                    break;
+                case 6:
+                    int curVirId = IOInterfacer.requestInt("Enter the id of the threat you want to inspect", (i)-> 0<=i && i<engine.getDefCount(),"Index out of range");
+                    IO.println(engine.getInfo(curVirId));
+                    break;
+                case 7:
                     break;
                 default:
                     IO.println("Invalid option");

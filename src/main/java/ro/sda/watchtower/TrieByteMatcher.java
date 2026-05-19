@@ -1,9 +1,6 @@
 package ro.sda.watchtower;
 
-import org.w3c.dom.Node;
-
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * Clasa pentru implementarea arborilor Tries
@@ -42,7 +39,8 @@ public class TrieByteMatcher {
                 SequenceMatch match = new SequenceMatch(pointer.getMatchId(), readHead - size,getMatchLength(pointer));
                 matches.add(match);
             }
-            pointer.advance(b);
+            pointer = pointer.advance(b);
+            ++readHead;
         }
         return matches;
     }

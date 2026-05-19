@@ -2,23 +2,32 @@ package ro.sda.watchtower;
 
 public class RBTreeNode {
     private RBNodeColor color;
-    private String value;
-    private int key;
+    private final String value;
+    private final int key;
     private RBTreeNode parent;
     private RBTreeNode left;
     private RBTreeNode right;
-    public static final RBTreeNode nullNode = new RBTreeNode(-1,"");
-    public RBTreeNode(int key, String value){
+
+    private RBTreeNode(int key, String value){
         this.key = key;
         this.value = value;
         this.color = RBNodeColor.RED;
-        this.parent = nullNode;
-        this.left = nullNode;
-        this.right = nullNode;
-        nullNode.parent=nullNode;
-        nullNode.left=nullNode;
-        nullNode.right=nullNode;
+    }
 
+    public static RBTreeNode makeNode(int key, String value, RBTreeNode nullNode){
+        RBTreeNode node = new RBTreeNode(key,value);
+        node.setParent(nullNode);
+        node.setLeft(nullNode);
+        node.setRight(nullNode);
+        return node;
+    }
+    public static RBTreeNode makeNullNode(){
+        RBTreeNode node = new RBTreeNode(-1, "");
+        node.setParent(node);
+        node.setLeft(node);
+        node.setRight(node);
+        node.setColor(RBNodeColor.BLACK);
+        return node;
     }
 
     @Override

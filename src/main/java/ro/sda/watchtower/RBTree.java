@@ -4,18 +4,19 @@ import java.util.NoSuchElementException;
 
 public class RBTree {
     private RBTreeNode root;
+    public static final RBTreeNode nullNode = RBTreeNode.makeNullNode();
     public RBTree(){
-        root = RBTreeNode.nullNode;
+        root = nullNode;
     }
 
     private RBTreeNode BSTreeAdd(int key, String value){
-        if(root == RBTreeNode.nullNode){
-            root = new RBTreeNode(key,value);
+        if(root == nullNode){
+            root = RBTreeNode.makeNode(key,value,nullNode);
             return root;
         }
         RBTreeNode node = root;
         RBTreeNode parent = root;
-        while(node != RBTreeNode.nullNode){
+        while(node != nullNode){
             parent = node;
             int cKey = node.getKey();
             if(key == cKey) return node; // ignore duplicates
@@ -25,13 +26,13 @@ public class RBTree {
                 node = node.getRight();
         }
         if(key < parent.getKey()){
-            RBTreeNode n = new RBTreeNode(key, value);
+            RBTreeNode n = RBTreeNode.makeNode(key, value, nullNode);
             parent.setLeft(n);
             n.setParent(parent);
             return n;
         }
         else{
-            RBTreeNode n = new RBTreeNode(key, value);
+            RBTreeNode n = RBTreeNode.makeNode(key, value, nullNode);
             parent.setRight(n);
             n.setParent(parent);
             return n;
@@ -41,7 +42,7 @@ public class RBTree {
 
     private RBTreeNode locate(int key){
         RBTreeNode node = root;
-        while(node != RBTreeNode.nullNode){
+        while(node != nullNode){
             int cKey = node.getKey();
             if(key == cKey) break; // ignore duplicates
             if(key < cKey)
@@ -58,7 +59,7 @@ public class RBTree {
             y.getLeft().setParent(x);
         }
         y.setParent(x.getParent());
-        if(x.getParent() == RBTreeNode.nullNode){
+        if(x.getParent() == nullNode){
             this.root = y;
         } else if (x == x.getParent().getLeft()) {
             x.getParent().setLeft(y);
@@ -77,7 +78,7 @@ public class RBTree {
             y.getRight().setParent(x);
         }
         y.setParent(x.getParent());
-        if(x.getParent() == RBTreeNode.nullNode){
+        if(x.getParent() == nullNode){
             this.root = y;
         } else if (x == x.getParent().getRight()) {
             x.getParent().setRight(y);
@@ -189,15 +190,15 @@ public class RBTree {
     }
     private void BSTRemove(int key) throws NoSuchElementException{
         RBTreeNode targetNode = locate(key);
-        if(targetNode == RBTreeNode.nullNode)
+        if(targetNode == nullNode)
             throw new NoSuchElementException("Item does not exist");
         RBNodeColor origColor = targetNode.getColor();
         RBTreeNode x;
-        if(targetNode.getLeft() == RBTreeNode.nullNode){
+        if(targetNode.getLeft() == nullNode){
             x = targetNode.getRight();
             translate(targetNode, targetNode.getRight());
         }
-        else if (targetNode.getRight() == RBTreeNode.nullNode){
+        else if (targetNode.getRight() == nullNode){
             x = targetNode.getLeft();
             translate(targetNode, targetNode.getLeft());
         }
@@ -222,7 +223,7 @@ public class RBTree {
             RBTreeRemoveFixup(x);
     }
     private void translate(RBTreeNode target, RBTreeNode source){
-        if(target.getParent() == RBTreeNode.nullNode){
+        if(target.getParent() == nullNode){
             root = source;
         } else if (target == target.getParent().getLeft()) {
             target.getParent().setLeft(source);
@@ -232,14 +233,14 @@ public class RBTree {
     }
     RBTreeNode succesor(RBTreeNode x){
         RBTreeNode result = x.getRight();
-        if(result != RBTreeNode.nullNode){
-            while(result.getLeft() != RBTreeNode.nullNode)
+        if(result != nullNode){
+            while(result.getLeft() != nullNode)
                 result = result.getLeft();
         }
         else{
             result = x;
             RBTreeNode parent = x.getParent();
-            while(parent != RBTreeNode.nullNode && result == parent.getLeft()){
+            while(parent != nullNode && result == parent.getLeft()){
                 result = parent;
                 parent = parent.getParent();
             }
@@ -257,6 +258,20 @@ public class RBTree {
     public String getForKey(int key){
         RBTreeNode n = locate(key);
         return n.getValue();
+    }
+
+    private void inOrderTraverse(RBTreeNode node, StringBuilder sb){
+        if(node.getLeft() != nullNode)
+            inOrderTraverse(node.getLeft(), sb);
+        sb.append(node);
+        if(node.getRight() != nullNode)
+            inOrderTraverse(node.getRight(), sb);
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Traversare in-ordine:\n");
+        inOrderTraverse(root,sb);
+        return sb.toString();
     }
 
     public void remove(int key) throws NoSuchElementException{
