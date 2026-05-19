@@ -15,6 +15,10 @@ public class RBTreeNode {
         this.parent = nullNode;
         this.left = nullNode;
         this.right = nullNode;
+        nullNode.parent=nullNode;
+        nullNode.left=nullNode;
+        nullNode.right=nullNode;
+
     }
 
     @Override
