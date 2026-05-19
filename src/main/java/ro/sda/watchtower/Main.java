@@ -11,6 +11,9 @@ import java.util.Scanner;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    /**
+     * Funcție ce printează meniul unui program la comanda help sau menu sau la prima rulare
+     */
     private static void printHeader(){
         IO.println(String.format("Current directory: %s", Paths.get("")
                 .toAbsolutePath()));
@@ -23,6 +26,12 @@ public class Main {
         IO.println("6. Afisati informatii despre o amenintare");
         IO.println("7. Inchideti");
     }
+
+    /**
+     * Funcție de gestiune a meniului. Inițiază o buclă care parsează valoarea introdusă de utilizator. În caz de eroare, utilizatorul este
+     * ghidat spre a alege o opțiune corectă
+     * @return Opțiunea corectă aleasă
+     */
     private static int showMenu(){
         int decision = -1;
         printHeader();

@@ -2,13 +2,22 @@ package ro.sda.watchtower;
 
 import java.util.NoSuchElementException;
 
+/**
+ * Clasa ce modelează un arbore red-black
+ */
 public class RBTree {
     private RBTreeNode root;
-    public static final RBTreeNode nullNode = RBTreeNode.makeNullNode();
+    private static final RBTreeNode nullNode = RBTreeNode.makeNullNode(); //nodul null
     public RBTree(){
         root = nullNode;
     }
 
+    /**
+     * Adaugă un nod într-un arbore binar de căutare. Acest pas reprezintă prima parte a inserării într-un Red-Black Tree
+     * @param key cheie de inserat
+     * @param value valoarea cheii
+     * @return Noul nod inserat sau un nod existent cu aceeași cheie
+     */
     private RBTreeNode BSTreeAdd(int key, String value){
         if(root == nullNode){
             root = RBTreeNode.makeNode(key,value,nullNode);
@@ -40,6 +49,11 @@ public class RBTree {
 
     }
 
+    /**
+     * Găsește cheia în arbore
+     * @param key Cheia de căutat în arbore
+     * @return Nodul corespunzător cheii introduse sau nodul nil, dacă cheia nu există
+     */
     private RBTreeNode locate(int key){
         RBTreeNode node = root;
         while(node != nullNode){
@@ -52,6 +66,11 @@ public class RBTree {
         }
         return node;
     }
+
+    /**
+     * Rotește subarborele la stânga
+     * @param x Nodul pivot în jurul căruia se execută rotirea
+     */
     private void rotateLeft(RBTreeNode x){
         RBTreeNode y = x.getRight();
         x.setRight(y.getLeft());
@@ -71,6 +90,10 @@ public class RBTree {
         x.setParent(y);
     }
 
+    /**
+     * Rotește subarborele la dreapta
+     * @param x Nodul pivot în jurul căruia se execută rotirea
+     */
     private void rotateRight(RBTreeNode x){
         RBTreeNode y = x.getLeft();
         x.setLeft(y.getRight());
@@ -89,6 +112,11 @@ public class RBTree {
         y.setRight(x);
         x.setParent(y);
     }
+
+    /**
+     * Funcție de reparare a proprietăților arborelui Red-Black la adunare
+     * @param z Nodul de la care se începe reparația
+     */
     private void RBTreeAddFixup(RBTreeNode z){
         while (z.getParent().getColor() == RBNodeColor.RED){
             if(z.getParent() == z.getParent().getParent().getLeft()){
@@ -131,6 +159,10 @@ public class RBTree {
         root.setColor(RBNodeColor.BLACK);
     }
 
+    /**
+     * Funcție de reparare a proprietăților arborelui Red-Black la ștergere
+     * @param x Nodul de la care se începe reparația
+     */
     private void RBTreeRemoveFixup(RBTreeNode x){
         while (x != root && x.getColor() == RBNodeColor.BLACK){
             if(x == x.getParent().getLeft()){
@@ -188,6 +220,12 @@ public class RBTree {
         }
         x.setColor(RBNodeColor.BLACK);
     }
+
+    /**
+     * Șterge cheia din arbore conform algoritmului unui arbore binar de căutare
+     * @param key Cheia de ștergere
+     * @throws NoSuchElementException Dacă elementul nu există
+     */
     private void BSTRemove(int key) throws NoSuchElementException{
         RBTreeNode targetNode = locate(key);
         if(targetNode == nullNode)
@@ -222,6 +260,12 @@ public class RBTree {
         if(origColor == RBNodeColor.BLACK)
             RBTreeRemoveFixup(x);
     }
+
+    /**
+     * "Translatează" sau transplantă un subarbore la o altă locație
+     * @param target Locația unde trebuie translatat subarborele
+     * @param source Subarborele de translatat
+     */
     private void translate(RBTreeNode target, RBTreeNode source){
         if(target.getParent() == nullNode){
             root = source;
@@ -231,6 +275,12 @@ public class RBTree {
         else target.getParent().setRight(source);
         source.setParent(target.getParent());
     }
+
+    /**
+     * Obține succesorul unui nod dat
+     * @param x Nodul pentru care se caută succesorul
+     * @return Nodul succesor
+     */
     RBTreeNode succesor(RBTreeNode x){
         RBTreeNode result = x.getRight();
         if(result != nullNode){
@@ -250,16 +300,31 @@ public class RBTree {
 
     }
 
+    /**
+     * Adaugă o pereche cheie-valoare în arborele Red-Black
+     * @param key Cheia de indexare
+     * @param value valoarea
+     */
     public void add(int key, String value){
         RBTreeNode n = BSTreeAdd(key,value);
         RBTreeAddFixup(n);
     }
 
+    /**
+     * Obține valoarea de la cheia precizată
+     * @param key Cheia de căutare
+     * @return Valoarea aferentă cheii specificate
+     */
     public String getForKey(int key){
         RBTreeNode n = locate(key);
         return n.getValue();
     }
 
+    /**
+     * Execută o traversare in-order al arborelui. Folosit la afișare
+     * @param node nodul actual
+     * @param sb StringBuilder în care se compune output-ul final
+     */
     private void inOrderTraverse(RBTreeNode node, StringBuilder sb){
         if(node.getLeft() != nullNode)
             inOrderTraverse(node.getLeft(), sb);
@@ -275,6 +340,11 @@ public class RBTree {
         return sb.toString();
     }
 
+    /**
+     * Elimină o cheie din arbore
+     * @param key cheia de eliminat
+     * @throws NoSuchElementException Dacă cheia nu există în arbore
+     */
     public void remove(int key) throws NoSuchElementException{
         BSTRemove(key);
     }

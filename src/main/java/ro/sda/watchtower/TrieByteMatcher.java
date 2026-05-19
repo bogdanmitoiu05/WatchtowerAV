@@ -3,7 +3,8 @@ package ro.sda.watchtower;
 import java.util.*;
 
 /**
- * Clasa pentru implementarea arborilor Tries
+ * Clasa pentru implementarea arborilor Trie
+ * @see TrieNode
  */
 public class TrieByteMatcher {
 
@@ -11,18 +12,33 @@ public class TrieByteMatcher {
     private int count;
     private TrieNode pointer;
     private long readHead;
+    private final Queue<Integer> emptySlots; // pentru momentele când se șterge un id care nu este exact la extremitatea dreaptă
+
+    /**
+     * Creează un nou arbore Trie. Acest constructor inițializează nodul rădăcină, pointerul de căutare, capul de citire și numărul de intrări
+     */
     public TrieByteMatcher(){
         root = new TrieNode();
         root.setFailNode(root);
         count = 0;
         pointer = root;
         readHead = 0;
+        emptySlots = new LinkedList<>();
     }
 
+    /**
+     * Obține numărul de înregistrări din arbore
+     * @return Numărul de înregistrări din arbore
+     */
     public int getCount(){
         return count;
     }
 
+    /**
+     * Obține lungimea unei potriviri din arbore. Această funcție numără de jos în sus
+     * @param start Nodul de la care se pornește
+     * @return Numărul de caractere pentru o potrivire
+     */
     private long getMatchLength(TrieNode start){
         long size = 0;
         while(!start.isRoot()){
@@ -31,6 +47,15 @@ public class TrieByteMatcher {
         }
         return size;
     }
+
+    /**
+     * Funcție ce primește un buffer de octeți și încearcă să găsească șabloanele stocare în arbore. De reținut că această funcție <b>modifică starea internă</b>
+     * a arborelui, deoarece se păstrează un indicator (pointer) ce se mișcă în interiorul arborelui pentru a facilita căutarea pe intrări mai mari decât mărimea
+     * unui buffer. Pentru a trece la un alt fișier, trebuie să se apeleze <code>reset()</code>
+     * @param buffer Bufferul în care se caută
+     * @return Listă de potriviri
+     * @see SequenceMatch
+     */
     public List<SequenceMatch> tryMatchBuffer(byte[] buffer){
         List<SequenceMatch> matches = new ArrayList<>();
         for(byte b: buffer){
@@ -47,14 +72,22 @@ public class TrieByteMatcher {
         }
         return matches;
     }
+
+    /**
+     * Resetează indicatorul pentru a începe scanarea unui nou fișier
+     */
     public void reset(){
         pointer = root;
         readHead = 0;
     }
-    private void configureFailNodesForNode(ByteAndNode pair){
-        TrieNode orig = pair.node();
-        TrieNode node = pair.node();
-        Byte b = pair.b();
+
+    /**
+     * Configurează legăturile de eșec pentru un nod dat
+     * @param node Perechea de octet și nod necesară algoritmului
+     */
+    private void configureFailNodesForNode(TrieNode node){
+        TrieNode orig = node;
+        Byte b = node.getTransitionByte();
         if(node.isRoot()) return;
         node = node.getParent().getFailNode();
 
@@ -67,19 +100,26 @@ public class TrieByteMatcher {
         }
         orig.setFailNode(node);
     }
-    private void configureFailNodes(){
-        Queue<ByteAndNode> nodes = new LinkedList<>();
-        nodes.add(new ByteAndNode(null, root));
-        while (!nodes.isEmpty()){
-            ByteAndNode pair = nodes.remove();
-            TrieNode node = pair.node();
 
-            for(Byte b: node.getChildren().keySet()){
-                nodes.add(new ByteAndNode(b, node.advance(b).node()));
-            }
-            configureFailNodesForNode(pair);
+    /**
+     * Configurează toate legăturile de eșec pentru arbore
+     */
+    private void configureFailNodes(){
+        Queue<TrieNode> nodes = new LinkedList<>();
+        nodes.add(root);
+        while (!nodes.isEmpty()){
+            TrieNode node = nodes.remove();
+
+            nodes.addAll(node.getChildren().values());
+            configureFailNodesForNode(node);
         }
     }
+
+    /**
+     * Introduce o nouă secvență de octeți în baza de date a arborelui. După finalizarea tuturor operațiilor de adăugare trebuie să se apeleze <code>commit()</code>.
+     * @param byteStream Buffer de octeți
+     * @return ID-ul secvenței
+     */
     public int addNewSequence(byte[] byteStream){
         TrieNode node = root;
 
@@ -89,16 +129,28 @@ public class TrieByteMatcher {
             }
             node = node.advance(b).node();
         }
-        node.markAsFinal(count);
+        if(emptySlots.isEmpty())
+            node.markAsFinal(count);
+        else
+            node.markAsFinal(emptySlots.remove());
         ++count;
         return count-1;
 
     }
+
+    /**
+     * Execută post-procesarea necesară funcționării algoritmului de căutare
+     */
     public void commit(){
         configureFailNodes();
     }
 
 
+    /**
+     * Șterge secvența de octeți aferentă indexului dat
+     * @param id Indexul secvenței de șters
+     * @throws NoSuchElementException În cazul în care se introduce un index ce nu există în arbore
+     */
     public void deleteSequenceById(int id) throws NoSuchElementException{
 
         Stack<TrieNode> stack = new Stack<>();
@@ -132,8 +184,16 @@ public class TrieByteMatcher {
             }
             node.remove(transitionByte);
         }
+        if(id != count-1)
+            emptySlots.add(id);
         --count;
     }
+
+    /**
+     * Obține toate secvențele de octeți înregistrate în arbore
+     * @return Lista de secvențe
+     * @see SequenceEntry
+     */
     public List<SequenceEntry> getRegisteredStrings(){
         Stack<TrieNode> stack = new Stack<>();
         Stack<TrieNode> sequenceBytes = new Stack<>();

@@ -1,5 +1,8 @@
 package ro.sda.watchtower;
 
+/**
+ * Culoarea unui nod dintr-un arbore red-black
+ */
 public enum RBNodeColor {
     BLACK,
     RED;
